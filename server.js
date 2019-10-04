@@ -11,16 +11,18 @@ connectDb();
 const app = express();
 
 // Init middleware
-app.use(express.json({
+app.use(
+  express.json({
     extended: false
-}));
+  })
+);
 
 // Default route
 app.get('/', (req, res) => res.send('API Running'));
 
 // Register routes
 apiRouteCollection.forEach(route => {
-    app.use(route.prefixUrl, route.router);
+  app.use(route.prefixUrl, route.router);
 });
 
 // Run server
