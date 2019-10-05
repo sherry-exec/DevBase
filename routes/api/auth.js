@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 
+const validate = require('../../middleware/validate');
 const User = require('../../models/User');
 
 // Auth API route config
@@ -21,15 +22,8 @@ router.post(
       .not()
       .isEmpty()
   ],
+  validate,
   async (req, res) => {
-    // input validation
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array()
-      });
-    }
-
     const { email, password } = req.body;
 
     // check user

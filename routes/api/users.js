@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 
 const auth = require('../../middleware/auth');
+const validate = require('../../middleware/validate');
 const User = require('../../models/User');
 
 // Users API route config
@@ -27,15 +28,8 @@ router.post(
       max: 18
     })
   ],
+  validate,
   async (req, res) => {
-    // input validation
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array()
-      });
-    }
-
     const { name, email, password } = req.body;
 
     try {
