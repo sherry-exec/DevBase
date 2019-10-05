@@ -1,13 +1,12 @@
 const express = require('express');
-const { check, validationResult } = require('express-validator');
-const gravatar = require('gravatar');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const config = require('config');
+const { check } = require('express-validator');
 
+// Middleware
 const auth = require('../../middleware/auth');
 const validate = require('../../middleware/validate');
-const User = require('../../models/User');
+
+// Services
+const userService = require('../../services/userService');
 
 // Users API route config
 const prefixUrl = '/api/users';
@@ -30,53 +29,9 @@ router.post(
   ],
   validate,
   async (req, res) => {
-    const { name, email, password } = req.body;
-
     try {
-      // check if email already exists
-      let existingUserWithEmail = await User.findOne({ email });
-      if (existingUserWithEmail) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Email address already exists' }] });
-      }
-
-      // try get user's gravatar
-      const avatar = gravatar.url(email, {
-        s: '200', // size
-        r: 'pg', // rating
-        d: 'mm' // default
-      });
-
-      // encrypt password
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-
-      // save user
-      const user = new User({
-        name,
-        avatar,
-        email,
-        password: hashedPassword
-      });
-      await user.save();
-
-      // response
-      const payload = {
-        user: {
-          id: user.id
-        }
-      };
-
-      jwt.sign(
-        payload,
-        config.get('JWTSecret'),
-        { expiresIn: 360000 },
-        (err, token) => {
-          if (err) throw err;
-          return res.send(token);
-        }
-      );
+      const response = await userService.register(req.body);
+      return res.status(response.status).send(response.data);
     } catch (err) {
       console.log(err.message);
       return res.status(500).send('Server error');
@@ -89,8 +44,8 @@ router.post(
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
-    return res.json(user);
+    const response = await userService.getById(req.user.id);
+    return res.status(response.status).json(response.data);
   } catch (err) {
     return res.status(500).send('Server error');
   }
