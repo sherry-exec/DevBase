@@ -1,3 +1,4 @@
 {
-  "MongoURI": "mongodb+srv://root:qFteNWFt2AXtaVWb@defaultcluster-g5a9w.azure.mongodb.net/DefaultCluster?retryWrites=true&w=majority"
+  "MongoURI": "mongodb+srv://root:qFteNWFt2AXtaVWb@defaultcluster-g5a9w.azure.mongodb.net/DefaultCluster?retryWrites=true&w=majority",
+  "JWTSecret": "2akX65Kz4gagMKzM"
 }
