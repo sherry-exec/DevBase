@@ -31,7 +31,7 @@ router.post(
   async (req, res) => {
     try {
       const response = await userService.register(req.body);
-      return res.status(response.status).send(response.data);
+      return res.status(response.status).json(response.data);
     } catch (err) {
       console.log(err.message);
       return res.status(500).send('Server error');

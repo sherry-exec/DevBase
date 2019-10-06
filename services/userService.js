@@ -61,6 +61,9 @@ const userService = {
   },
   getById: async id => {
     const user = await User.findById(id).select('-password');
+    if (!user) {
+      return new response(404, { msg: 'User not found' });
+    }
     return new response(200, user);
   }
 };
