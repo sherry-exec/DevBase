@@ -8,6 +8,9 @@ const { response } = require('../helpers/models');
 // Models
 const User = require('../models/User');
 
+// Services
+const profileService = require('../services/profileService');
+
 const userService = {
   register: async user => {
     const { name, email, password } = user;
@@ -39,6 +42,11 @@ const userService = {
       password: hashedPassword
     });
     await user.save();
+
+    // init empty profile
+    try {
+      await profileService.create({ user: user.id });
+    } catch (err) {}
 
     // response
     const payload = {

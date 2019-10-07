@@ -6,12 +6,10 @@ const ProfileSchema = new mongoose.Schema({
     ref: 'user'
   },
   status: {
-    type: String,
-    required: true
+    type: String
   },
   skills: {
-    type: [String],
-    required: true
+    type: [String]
   },
   bio: {
     type: String

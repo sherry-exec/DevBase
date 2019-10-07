@@ -5,8 +5,11 @@ const Profile = require('../models/Profile');
 const User = require('../models/User');
 
 const profileService = {
-  create: async profile => {},
-  update: async profile => {},
+  create: async prof => {
+    const profile = new Profile({ ...prof });
+    await profile.save();
+  },
+  update: async prof => {},
   getById: async id => {
     const profile = await Profile.findOne({ user: id }).populate('user', [
       'name',
