@@ -31,7 +31,7 @@ router.post(
   async (req, res) => {
     try {
       const response = await userService.register(req.body);
-      return res.status(response.status).json(response.data);
+      return res.status(response.status).json(response.getBody());
     } catch (err) {
       console.log(err.message);
       return res.status(500).send('Server error');
@@ -45,7 +45,7 @@ router.post(
 router.get('/', auth, async (req, res) => {
   try {
     const response = await userService.getById(req.user.id);
-    return res.status(response.status).json(response.data);
+    return res.status(response.status).json(response.getBody());
   } catch (err) {
     return res.status(500).send('Server error');
   }

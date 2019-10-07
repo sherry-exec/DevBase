@@ -38,7 +38,7 @@ router.post(
 router.get('/:userId', async (req, res) => {
   try {
     const response = await profileService.getById(req.params.userId);
-    return res.status(response.status).json(response.data);
+    return res.status(response.status).json(response.getBody());
   } catch (err) {
     console.log(err.message);
     return res.status(500).send('Server error');
@@ -51,7 +51,7 @@ router.get('/:userId', async (req, res) => {
 router.get('/me', auth, async (req, res) => {
   try {
     const response = await profileService.getById(req.user.id);
-    return res.status(response.status).json(response.data);
+    return res.status(response.status).json(response.getBody());
   } catch (err) {
     console.log(err.message);
     return res.status(500).send('Server error');

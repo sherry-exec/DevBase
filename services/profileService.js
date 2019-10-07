@@ -16,7 +16,7 @@ const profileService = {
       'avatar'
     ]);
     if (!profile) {
-      return new response(404, { msg: 'Profile not found' });
+      return new response(404, 'Profile not found');
     }
     return new response(200, profile);
   }

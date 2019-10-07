@@ -18,9 +18,7 @@ const userService = {
     // check if email already exists
     let existingUserWithEmail = await User.findOne({ email });
     if (existingUserWithEmail) {
-      return new response(400, {
-        errors: [{ msg: 'Email address already exists' }]
-      });
+      return new response(400).error('email', 'Email address already exists');
     }
 
     // try get user's gravatar
@@ -70,7 +68,7 @@ const userService = {
   getById: async id => {
     const user = await User.findById(id).select('-password');
     if (!user) {
-      return new response(404, { msg: 'User not found' });
+      return new response(404, 'User not found');
     }
     return new response(200, user);
   }
