@@ -18,7 +18,7 @@ const userService = {
     // check if email already exists
     let existingUserWithEmail = await User.findOne({ email });
     if (existingUserWithEmail) {
-      return new response(400).error('email', 'Email address already exists');
+      return new response(400).setError('email', 'Email address already exists');
     }
 
     // try get user's gravatar

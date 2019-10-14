@@ -13,22 +13,22 @@ class response {
     return this;
   }
 
-  status(status) {
+  setStatus(status) {
     this.status = status;
     return this;
   }
 
-  msg(msg) {
+  setMsg(msg) {
     this.msg = msg;
     return this;
   }
 
-  data(data) {
+  setData(data) {
     this.data = data;
     return this;
   }
 
-  error(label, msg) {
+  setError(label, msg) {
     this.errors.push({ label, msg });
     return this;
   }
