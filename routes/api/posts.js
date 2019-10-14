@@ -85,6 +85,54 @@ router.put('/unlike/:id', auth, async (req, res) => {
   }
 });
 
+// @route   POST /api/posts/:id/comments
+// @desc    Comment on a post
+// @access  private
+router.post(
+  '/:id/comments',
+  [
+    check('text', 'Comment text is required')
+      .not()
+      .isEmpty()
+  ],
+  validate,
+  auth,
+  async (req, res) => {
+    try {
+      const comment = {
+        postId: req.params.id,
+        user: req.user.id,
+        text: req.body.text
+      };
+
+      const result = await postService.addComment(comment);
+      return res.status(result.status).json(result.getBody());
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).send('Server error');
+    }
+  }
+);
+
+// @route   DELETE /api/posts/:postId/comments/:commentId
+// @desc    Delete a comment from post
+// @access  private
+router.delete('/:postId/comments/:commentId', auth, async (req, res) => {
+  try {
+    const comment = {
+      postId: req.params.postId,
+      commentId: req.params.commentId,
+      userId: req.user.id
+    };
+
+    const result = await postService.removeComment(comment);
+    return res.status(result.status).json(result.getBody());
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).send('Server error');
+  }
+});
+
 // @route   GET /api/posts/:id
 // @desc    Get post
 // @access  public

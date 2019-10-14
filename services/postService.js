@@ -46,6 +46,42 @@ const unlike = async (postId, userId) => {
   return new response(200, post.likes);
 };
 
+const addComment = async data => {
+  const comment = ({ user, text } = data);
+
+  const post = await Post.findById(data.postId);
+  if (!post) {
+    return new response(404);
+  }
+
+  post.comments.unshift(comment);
+  await post.save();
+
+  return new response(200, post.comments);
+};
+
+const removeComment = async data => {
+  const { userId, commentId, postId } = data;
+
+  const post = await Post.findById(postId);
+  if (!post) {
+    return new response(404);
+  }
+
+  if (
+    post.comments.filter(
+      comment => comment._id == commentId && comment.user == userId
+    ).length < 1
+  ) {
+    return new response(404);
+  }
+
+  post.comments = post.comments.filter(comment => comment._id != commentId);
+  await post.save();
+
+  return new response(200, post.comments);
+};
+
 const getById = async id => {
   const post = await Post.findById(id).populate('user', ['name', 'avatar']);
   if (!post) {
@@ -61,4 +97,13 @@ const getAll = async () => {
   return new response(200, posts);
 };
 
-module.exports = { create, remove, like, unlike, getById, getAll };
+module.exports = {
+  create,
+  remove,
+  like,
+  unlike,
+  addComment,
+  removeComment,
+  getById,
+  getAll
+};
